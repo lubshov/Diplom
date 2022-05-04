@@ -51,8 +51,8 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "Время: -"))
 
     def get_time(self):
-        self.label.setText("Время: " + Get_time())
-
+        # self.label.setText("Время: " + Get_time())
+        Get_time()
     def clean_time(self):
         self.label.setText("Время: -")
 
