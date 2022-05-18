@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from Test_function import Get_time
+from Test_function import Get_time, FunctionGetTime
 # Form implementation generated from reading ui file '.\untitled.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
@@ -23,12 +23,12 @@ class Ui_Dialog(object):
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setContentsMargins(0, 0, 0, 0)
         self.formLayout.setObjectName("formLayout")
-        self.Button_Function = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.Button_Function.setObjectName("pushButton")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.Button_Function)
-        self.Button_Clean = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.Button_Clean.setObjectName("pushButton_2")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.Button_Clean)
+        self.Button_StartGetTime = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.Button_StartGetTime.setObjectName("pushButton")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.Button_StartGetTime)
+        self.Button_StopGetTime = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.Button_StopGetTime.setObjectName("pushButton_2")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.Button_StopGetTime)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(180, 100, 141, 81))
         self.label.setLayoutDirection(QtCore.Qt.LeftToRight)
@@ -39,28 +39,43 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-
-        self.add_functions()
-
-
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.Button_Function.setText(_translate("Dialog", "Function"))
-        self.Button_Clean.setText(_translate("Dialog", "Clean"))
+        self.Button_StartGetTime.setText(_translate("Dialog", "Запуск"))
+        self.Button_StopGetTime.setText(_translate("Dialog", "Стоп"))
         self.label.setText(_translate("Dialog", "Время: -"))
 
-    def get_time(self):
-        # self.label.setText("Время: " + Get_time())
-        Get_time()
-    def clean_time(self):
-        self.label.setText("Время: -")
-
-    def add_functions(self):
-        self.Button_Function.clicked.connect(self.get_time)
-        self.Button_Clean.clicked.connect(self.clean_time)
 
 
+
+class MyWin(QtWidgets.QWidget, Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.Button_StartGetTime.clicked.connect(self.start)
+        self.Button_StopGetTime.clicked.connect(self.stop)
+        self.FunctionGetTime = FunctionGetTime()
+        self.FunctionGetTime.dataChanged.connect(self.dataThreads)
+        self.FunctionGetTime.finished.connect(self.finishThreads)
+        self.FunctionGetTime.working = False
+
+    def start(self):
+        # print("test")
+
+        self.FunctionGetTime.working = True
+        self.FunctionGetTime.start()
+
+    def stop(self):
+        self.FunctionGetTime.working = False
+        self.FunctionGetTime.stoped()
+
+    def dataThreads(self, text):
+        self.label.setText("Время: " + text)
+
+    def finishThreads(self, text):
+        self.label.setText("Время: " + text)
 
 
 def create(text):

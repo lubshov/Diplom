@@ -2,6 +2,7 @@
 from window import Ui_Dialog
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from window import MyWin
 
 # def print_hi(name):
 #     # Use a breakpoint in the code line below to debug your script.
@@ -11,10 +12,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
+    w = MyWin()
+    w.show()
     sys.exit(app.exec_())
 
 
