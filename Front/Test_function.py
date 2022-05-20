@@ -13,12 +13,15 @@ def Get_time():
 class FunctionGetTime(QtCore.QThread):
     # Сигналы к которым можно подключиться:
     dataChanged = QtCore.pyqtSignal(str)
+
     finished = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.working = False
         # Программа в начале неактивна
+        print("test")
+        self.names_rows = ["time", "date"]
 
     def run(self):
         while self.working:

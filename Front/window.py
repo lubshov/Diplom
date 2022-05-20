@@ -47,8 +47,6 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "Время: -"))
 
 
-
-
 class MyWin(QtWidgets.QWidget, Ui_Dialog):
     def __init__(self):
         super().__init__()
@@ -62,8 +60,6 @@ class MyWin(QtWidgets.QWidget, Ui_Dialog):
         self.FunctionGetTime.working = False
 
     def start(self):
-        # print("test")
-
         self.FunctionGetTime.working = True
         self.FunctionGetTime.start()
 

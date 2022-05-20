@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-
+from Test_function import Get_time, FunctionGetTime
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QTableWidget, QTableWidgetItem
+from PyQt5.QtCore import QSize, Qt
 # Form implementation generated from reading ui file '.\Front\Design_Ui\Form_to_diplom_var1.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
@@ -23,12 +26,12 @@ class Ui_Dialog(object):
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setContentsMargins(0, 0, 0, 0)
         self.formLayout.setObjectName("formLayout")
-        self.pushButton = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.pushButton_2)
+        self.pushButton_StartGetTime = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.pushButton_StartGetTime.setObjectName("pushButton")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.pushButton_StartGetTime)
+        self.pushButton_StopGetTime = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.pushButton_StopGetTime.setObjectName("pushButton_2")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.pushButton_StopGetTime)
         self.tableWidget = QtWidgets.QTableWidget(Dialog)
         self.tableWidget.setGeometry(QtCore.QRect(50, 20, 801, 192))
         self.tableWidget.setObjectName("tableWidget")
@@ -66,8 +69,8 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.pushButton.setText(_translate("Dialog", "Старт"))
-        self.pushButton_2.setText(_translate("Dialog", "Стоп"))
+        self.pushButton_StartGetTime.setText(_translate("Dialog", "Старт"))
+        self.pushButton_StopGetTime.setText(_translate("Dialog", "Стоп"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Dialog", "Название параметра"))
         item = self.tableWidget.horizontalHeaderItem(1)
@@ -80,3 +83,34 @@ class Ui_Dialog(object):
         item.setText(_translate("Dialog", "Название параметра"))
         item = self.tableWidget_4.horizontalHeaderItem(1)
         item.setText(_translate("Dialog", "Значение"))
+
+
+class MainWindowsToDiplom(QtWidgets.QWidget, Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.pushButton_StartGetTime.clicked.connect(self.start)
+        self.pushButton_StopGetTime.clicked.connect(self.stop)
+        self.FunctionGetTime = FunctionGetTime()
+        self.FunctionGetTime.dataChanged.connect(self.dataThreads)
+        self.FunctionGetTime.finished.connect(self.finishThreads)
+        self.FunctionGetTime.working = False
+        self.tableWidget.setRowCount(len(self.FunctionGetTime.names_rows))
+
+    def start(self):
+        self.FunctionGetTime.working = True
+        self.FunctionGetTime.start()
+
+    def stop(self):
+        self.FunctionGetTime.working = False
+        self.FunctionGetTime.stoped()
+
+    def dataThreads(self, text):
+        for number_names in range(self.tableWidget.rowCount()):
+            self.tableWidget.setItem(number_names, 0, QTableWidgetItem(self.FunctionGetTime.names_rows[number_names]))
+            self.tableWidget.setItem(number_names, 1, QTableWidgetItem(text))
+
+    def finishThreads(self, text):
+        self.tableWidget.setItem(0,0, QTableWidgetItem(text))
+
