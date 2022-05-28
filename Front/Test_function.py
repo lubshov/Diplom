@@ -2,7 +2,7 @@ from datetime import datetime
 from time import sleep
 from PyQt5 import QtCore, QtWidgets
 import time
-
+from molibden6.diplom2 import measure
 
 def Get_time():
     now = datetime.now()
@@ -10,27 +10,28 @@ def Get_time():
     return current_time
 
 
-class FunctionGetTime(QtCore.QThread):
+class FunctionGetdata(QtCore.QThread):
     # Сигналы к которым можно подключиться:
-    dataChanged = QtCore.pyqtSignal(str)
+    dataChanged = QtCore.pyqtSignal(dict)
 
-    finished = QtCore.pyqtSignal(str)
+    # finished = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.working = False
         # Программа в начале неактивна
-        print("test")
-        self.names_rows = ["time", "date"]
+        self.names_rows = ["med", "speed", "speed_2"]
 
     def run(self):
+
         while self.working:
-            self.msleep(1)
+            self.msleep(100)
+            # print(measure())
             # Изменение переменной передаваемой как сигнал. Передача тестовой функции Get_time()
-            self.dataChanged.emit(Get_time())
+            self.dataChanged.emit(measure())
 
         # Изменение переменной передаваемой как сигнал при окончании работы
-        self.finished.emit(Get_time())
+        self.finished.emit(self.dataChanged)
 
     def stoped(self):
         return self.working

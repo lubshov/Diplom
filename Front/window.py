@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from Test_function import Get_time, FunctionGetTime
+# from Test_function import Get_time, FunctionGetTime
 # Form implementation generated from reading ui file '.\untitled.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
